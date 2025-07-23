@@ -34,8 +34,7 @@ pnpm build:slides
 - Each slide can have frontmatter for theme and layout configuration
 
 ### Key Directories
-- `slides/` - Individual slide markdown files
-- `layouts/` - Custom Vue layouts for different slide types (speaker, cover, etc.)
+- `slides/` - Individual slide markdown files with inline templates and styles
 - `ai_docs/` - AI-related documentation including speaker profile and brand guidelines
 - `public/` - Static assets accessible in slides
 

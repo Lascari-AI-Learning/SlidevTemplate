@@ -1,21 +1,19 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# Slidev Starter Template
 
 To start the slide show:
 
-- `pnpm install`
-- `pnpm dev`
+- `npm install`
+- `npm run dev`
 - visit <http://localhost:3030>
 
 Edit the markdown files in the [slides](./slides/) directory to see the changes.
-
-Learn more about Slidev at the [documentation](https://sli.dev/).
 
 ## Building Slides
 
 To build all slides in the `slides/` directory:
 
 ```bash
-pnpm build:slides
+npm run build:slides
 ```
 
 This will:
