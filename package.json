@@ -6,7 +6,10 @@
     "build": "slidev build ./index.md",
     "build:slides": "node scripts/build.ts",
     "dev": "slidev ./index.md --open",
-    "export": "slidev export"
+    "export": "slidev export",
+    "generate:slide": "tsx scripts/generate-slide.ts",
+    "list:templates": "ls -la slide-templates/",
+    "template:help": "echo 'Usage: npm run generate:slide -- --template=<template-name> --name=<slide-name> [--variable=value ...]'"
   },
   "dependencies": {
     "@slidev/cli": "^51.8.1",
@@ -14,6 +17,7 @@
     "@slidev/theme-seriph": "^0.25.0",
     "@slidev/types": "^51.8.2",
     "globby": "^14.1.0",
+    "lucide-vue-next": "^0.532.0",
     "vue": "^3.5.16"
   },
   "slidev": {

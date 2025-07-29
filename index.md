@@ -23,6 +23,10 @@ src: ./slides/06-closing-the-gap.md
 ---
 
 ---
+src: ./slides/07-modular-approach-continuum.md
+---
+
+---
 src: ./slides/09-what-this-means.md
 ---
 
