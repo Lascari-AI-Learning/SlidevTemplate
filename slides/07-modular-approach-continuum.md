@@ -35,12 +35,16 @@ import { X, Check } from 'lucide-vue-next'
           <X class="w-6 h-6 text-white" :stroke-width="3" />
         </div>
         <div class="w-full mt-2">
-          <h3 class="text-md font-bold mb-2 text-center mt-0">Reinventing the AI wheel</h3>
+          <p class="text-md font-bold mb-2 text-center mt-0">Reinventing the AI wheel</p>
           <p class="text-xs leading-relaxed text-center">Teams spend months or years developing custom models & infrastructure</p>
         </div>
       </div>
       <!-- Connecting line from left box to continuum -->
-      <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2" style="height: 245px; top: 100%;"></div>
+      <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2" style="height: 60px; top: 100%;"></div>
+      <!-- Add a circle at the bottom of the line to indicate the connection point -->
+      <div class="absolute left-1/2" style="top: calc(100% + 60px); transform: translateX(-50%);">
+        <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+      </div>
     </div>
   </v-click>
 
@@ -56,12 +60,16 @@ import { X, Check } from 'lucide-vue-next'
           <X class="w-6 h-6 text-white" :stroke-width="3" />
         </div>
         <div class="w-full mt-2">
-          <h3 class="text-md font-bold mb-2 text-center mt-0">Black box use of AI</h3>
+          <p class="text-md font-bold mb-2 text-center mt-0">Black box use of AI</p>
           <p class="text-xs leading-relaxed text-center">Teams implement only the most basic AI features like chatbots</p>
         </div>
       </div>
       <!-- Connecting line from right box to continuum -->
-      <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2" style="height: 245px; top: 100%;"></div>
+       <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2" style="height: 60px; top: 100%;"></div>
+      <!-- Add a circle at the bottom of the line to indicate the connection point -->
+      <div class="absolute left-1/2" style="top: calc(100% + 60px); transform: translateX(-50%);">
+        <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+      </div>
     </div>
   </v-click>
 
@@ -74,12 +82,17 @@ import { X, Check } from 'lucide-vue-next'
           <Check class="w-6 h-6 text-white" :stroke-width="3" />
         </div>
         <div class="w-full mt-2">
-          <h3 class="text-md font-bold mb-2 text-center mt-0">LEGO block use of AI</h3>
+          <p class="text-md font-bold mb-2 text-center mt-0">LEGO block use of AI</p>
           <p class="text-xs leading-relaxed text-center">Teams assemble differentiated AI features by integrating the best available AI capabilities with their product's data and functionality</p>
         </div>
       </div>
       <!-- Connecting line from middle box to continuum -->
-      <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2" style="height: 60px; top: 100%;"></div>
+      <!-- Vertical connecting line from middle box to continuum with a circle at the bottom -->
+      <div class="absolute left-1/2 bottom-0 w-[2px] bg-gray-700 transform -translate-x-1/2 mt-1" style="height: 60px; top: 100%;"></div>
+      <!-- Add a circle at the bottom of the line to indicate the connection point -->
+      <div class="absolute left-1/2" style="top: calc(100% + 60px); transform: translateX(-50%);">
+        <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+      </div>
     </div>
   </v-click>
 </div>

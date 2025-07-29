@@ -20,8 +20,8 @@ theme: ../
             <div class="flex flex-col">
                 <span class="text-2xl font-semibold mt-8 mb-2">What I've Done</span>
                 <ul class="space-y-3">
-                    <li class="text-lg leading-relaxed">3 years Full-time in Gen AI</li>
-                    <li class="text-lg leading-relaxed">Built <strong class="text-iron-ochre font-semibold">30+ Gen AI Projects</strong></li>
+                    <li class="text-lg leading-relaxed">3 years Full-Time in Gen AI</li>
+                    <li class="text-lg leading-relaxed">~2 years building <strong class="text-iron-ochre font-semibold">Agentic Systems</strong></li>
                 </ul>
             </div>
             <div class="flex flex-col">
