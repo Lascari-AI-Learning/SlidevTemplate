@@ -1,0 +1,13 @@
+{
+  "slides": [
+    { "order": "00", "template": "title", "source": "slide.md" },
+    { "order": "01", "template": "intro-what-well-cover", "source": "example.md" },
+    { "order": "02", "template": "about-me", "source": "slide.md" },
+    { "order": "03", "template": "icon-list-content", "source": "example.md" },
+    { "order": "04", "template": "continuum-diagram", "source": "example.md" },
+    { "order": "05", "template": "extremes-to-middle", "source": "example.md" },
+    { "order": "06", "template": "continuum-middle-ground", "source": "example.md" },
+    { "order": "07", "template": "three-to-one-takeaway", "source": "example.md" },
+    { "order": "99", "template": "conclusion-lets-connect", "source": "example.md" }
+  ]
+}

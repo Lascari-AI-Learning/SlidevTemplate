@@ -8,6 +8,7 @@
     "dev": "slidev ./index.md --open",
     "export": "slidev export",
     "generate:slide": "tsx scripts/generate-slide.ts",
+    "generate:showcase": "tsx scripts/generate-showcase.ts && npm run build:slides",
     "list:templates": "ls -la slide-templates/",
     "template:help": "echo 'Usage: npm run generate:slide -- --template=<template-name> --name=<slide-name> [--variable=value ...]'"
   },
@@ -30,5 +31,8 @@
       },
       "highlighter": "shiki"
     }
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }
