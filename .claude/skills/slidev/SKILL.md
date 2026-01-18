@@ -102,7 +102,7 @@ Capture screenshots for **all** templates in templates.json.
 
 ### Naming
 
-- **Template identifiers**: Use `kebab-case` (e.g., `intro-what-well-cover`, `three-to-one-takeaway`)
+- **Template identifiers**: Use `kebab-case` (e.g., `column-cards`, `three-to-one-takeaway`)
 - **Screenshot files**: `click-{n}.png` where n starts at 0
 - **Slide files**: Numbered prefix in `slides/` directory (e.g., `01-about-me.md`, `02-introduction.md`)
 

@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Slidev presentation about Claude Code. Slidev is a Vue.js-based presentation framework that uses markdown files for slides.
 
+**Live Template URL:** https://lascari-ai-learning.github.io/SlidevTemplate/
+
 ## Common Commands
 
 ```bash
@@ -79,7 +81,7 @@ slide-templates/
 
 #### Core Templates (Essential for most presentations)
 1. **title** - Opening slide with title, subtitle, and optional QR code
-2. **intro-what-well-cover** - Overview slide with 2-4 topic cards
+2. **column-cards** - Flexible column layout with icon cards (2-4 columns)
 3. **about-me** - Speaker introduction with photo and background
 4. **conclusion-lets-connect** - Closing slide with contact QR codes
 

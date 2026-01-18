@@ -110,7 +110,7 @@ The registry file at project root listing all templates.
     },
     {
       "order": "01",
-      "template": "intro-what-well-cover",
+      "template": "column-cards",
       "source": "example.md",
       "clicks": 3
     }
@@ -145,7 +145,7 @@ Most templates use `example.md` for screenshots since it has actual content to d
 | Order | Template | Clicks | Screenshots |
 |-------|----------|--------|-------------|
 | 00 | title | 0 | 1 |
-| 01 | intro-what-well-cover | 3 | 4 |
+| 01 | column-cards | 3 | 4 |
 | 02 | about-me | 0 | 1 |
 | 03 | icon-list-content | 2 | 3 |
 | 04 | continuum-diagram | 4 | 5 |

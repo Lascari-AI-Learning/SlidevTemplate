@@ -3,7 +3,7 @@ src: ./slides/00-title.md
 ---
 
 ---
-src: ./slides/01-intro-what-well-cover.md
+src: ./slides/01-column-cards.md
 ---
 
 ---

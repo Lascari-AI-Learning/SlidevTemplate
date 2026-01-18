@@ -1,13 +1,13 @@
-# Intro / What We'll Cover Template
+# Column Cards Template
 
 ## Purpose
-This template creates an overview slide showing multiple topics or sections that will be covered in the presentation. Each section is displayed in a card with an icon, title, subtitle, and bullet points.
+A flexible column layout displaying content in styled cards with icons. Each card includes an icon, title, subtitle, and bullet points. Commonly used for overview/agenda slides but works for any multi-column card layout.
 
 ## When to Use
-- Early in your presentation to set expectations
-- To provide a roadmap of topics you'll cover
-- When you need to organize content into 2-4 main sections
-- For agenda or overview slides
+- Overview or agenda slides showing topics to cover
+- Feature highlights or comparisons
+- Organizing content into 2-4 parallel sections
+- Any multi-column card-based layout
 
 ## Template Variables
 
@@ -34,7 +34,7 @@ Each section in the `{{sections}}` array should have:
 ## Usage Example
 
 ```bash
-npm run generate:slide -- --template=intro-what-well-cover --name=01-what-well-cover \
+npm run generate:slide -- --template=column-cards --name=01-agenda \
   --main_title="What We'll Cover Today" \
   --columns=3 \
   --sections='[

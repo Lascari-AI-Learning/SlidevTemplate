@@ -3,164 +3,172 @@ allowed-tools: Read, Bash(mkdir:*), mcp__playwright__*
 description: Capture screenshots for all slide templates
 ---
 
-# Sync All Template Screenshots
+<purpose>
+    - Capture progressive screenshots for every slide template in the library
+    - Ensure consistent visual documentation across the entire template collection
+    - Enable agents to visually understand all available template layouts
+</purpose>
 
-Capture screenshots for ALL slide templates showing each click state.
+<key_knowledge>
+    - templates.json structure and slide ordering conventions
+    - Slidev URL structure with click state query parameters
+    - Playwright MCP screenshot capture workflow
+    - Template screenshot folder organization
+</key_knowledge>
 
-## Overview
+<goal>
+    - Capture all click states for every template in templates.json
+    - Save screenshots to each template's screenshots/ folder
+    - Provide summary report of captured screenshots
+</goal>
 
-This workflow iterates through every template in `templates.json` and captures progressive screenshots for each. This ensures the entire template library has up-to-date visual documentation.
+<background>
+    - Visual documentation helps agents understand template layouts and styling
+    - Progressive screenshots show the storytelling flow of each slide
+    - Consistent documentation across the library improves template discoverability
+    - Screenshots must be refreshed when template content changes
+</background>
 
-**What this captures**:
-- Every template listed in templates.json
-- All click states for each template (from initial state through final reveal)
-- Screenshots saved to each template's `screenshots/` folder
+<workflow>
+    <overview>
+        1. Load all templates from templates.json
+        2. Iterate through each template capturing all click states
+        3. Report summary with per-template breakdown
+    </overview>
 
-**Why this matters**:
-- Agents can visually understand template layouts and styling
-- Progressive screenshots show the storytelling flow of each slide
-- Consistent documentation across the entire template library
+    <inputs>
+        <input name="templates_json" type="file" required="true">
+            The templates.json file containing the slides array
+            Each entry has: order, template, source, clicks
+        </input>
+    </inputs>
 
-## Workflow Steps
+    <steps>
+        <step name="load_templates">
+            <description>
+                - Read templates.json to get the list of all slides
+                - Extract the slides array containing template entries
+            </description>
+            <data_structure>
+                {
+                  "slides": [
+                    { "order": "00", "template": "title", "source": "slide.md", "clicks": 0 },
+                    { "order": "01", "template": "column-cards", "source": "example.md", "clicks": 3 },
+                    ...
+                  ]
+                }
+            </data_structure>
+            <fields_needed>
+                - order: Slide position (used to calculate URL)
+                - template: Template name (used for folder path)
+                - clicks: Number of click states to capture
+            </fields_needed>
+        </step>
 
-1. **Load Templates** - Read templates.json to get all slide entries
-2. **Iterate and Capture** - For each template, navigate to each click state and screenshot
-3. **Report Summary** - Show total templates synced and screenshot counts
+        <step name="iterate_and_capture">
+            <description>
+                - For EACH slide entry in templates.json
+                - Create screenshots directory if needed
+                - Calculate URL and capture all click states
+            </description>
 
----
+            <substep name="create_screenshots_directory">
+                mkdir -p slide-templates/{template}/screenshots/
+            </substep>
 
-## Step 1: Load Templates
+            <substep name="calculate_url">
+                Base URL: http://localhost:3030/ (dev server must be running)
 
-Read `templates.json` to get the list of all slides.
+                Formula: slide_number = parseInt(order) + 1
 
-**Action**: Read templates.json and extract the `slides` array.
+                Click state URLs:
+                - Initial (n=0): /{slide_number}
+                - Click n > 0: /{slide_number}?clicks={n}
+            </substep>
 
-```
-templates.json structure:
-{
-  "slides": [
-    { "order": "00", "template": "title", "source": "slide.md", "clicks": 0 },
-    { "order": "01", "template": "intro-what-well-cover", "source": "example.md", "clicks": 3 },
-    ...
-  ]
-}
-```
+            <substep name="capture_loop">
+                For each template, loop from n = 0 to clicks (inclusive):
 
-**For each slide entry, you will need**:
-- `order` - The slide's position (used to calculate URL)
-- `template` - The template name (used for folder path)
-- `clicks` - Number of click states to capture
+                1. Build URL:
+                   if n == 0: url = BASE_URL + slide_number
+                   else: url = BASE_URL + slide_number + "?clicks=" + n
 
-**Current templates (as of last update)**: 9 templates
+                2. Navigate:
+                   mcp__playwright__browser_navigate(url: full_url)
 
----
+                3. Wait for render:
+                   mcp__playwright__browser_wait_for(time: 1)
 
-## Step 2: Iterate and Capture
+                4. Capture screenshot:
+                   mcp__playwright__browser_take_screenshot(
+                       filename: "slide-templates/{template}/screenshots/click-{n}.png"
+                   )
 
-For EACH slide entry in templates.json, capture all click states.
+                5. Move file (Playwright saves to .playwright-mcp/ prefix):
+                   mv .playwright-mcp/slide-templates/{template}/screenshots/click-{n}.png \
+                      slide-templates/{template}/screenshots/click-{n}.png
+            </substep>
 
-### 2a. Create screenshots directory
+            <substep name="repeat">
+                Continue through entire slides array until all templates captured
+            </substep>
+        </step>
 
-Before capturing, ensure the screenshots folder exists:
+        <step name="report_summary">
+            <description>
+                - Provide completion summary after all screenshots captured
+                - Include per-template breakdown table
+                - Report any errors with specific templates/click states
+            </description>
+        </step>
+    </steps>
 
-```bash
-mkdir -p slide-templates/{template}/screenshots/
-```
+    <global_constraints>
+        - Dev server must be running (npm run dev) before starting capture
+        - Process all templates in order from templates.json
+        - Move files from .playwright-mcp/ to final location after each capture
+    </global_constraints>
 
-### 2b. Calculate URL
+    <output_format>
+        ## Sync All Complete ✅
 
-**Base URL**: `http://localhost:3030/` (local dev server - must be running via `npm run dev`)
+        Templates synced: {count} templates
+        Total screenshots: {total} files
 
-**Formula**:
-```
-slide_number = parseInt(order) + 1
-```
+        ### Per-Template Breakdown:
+        | Template | Clicks | Screenshots |
+        |----------|--------|-------------|
+        | title | 0 | 1 |
+        | column-cards | 3 | 4 |
+        | about-me | 0 | 1 |
+        | ... | ... | ... |
 
-**Click state URLs**:
-- Initial state (n=0): `/{slide_number}` (no query param needed)
-- Click state n > 0: `/{slide_number}?clicks={n}`
+        All screenshots saved to slide-templates/{template}/screenshots/
 
-### 2c. Capture loop
+        ### Errors (if any):
+        - {template}: Failed at click-{n} - {error message}
+    </output_format>
+</workflow>
 
-For each template, loop from `n = 0` to `clicks` (inclusive):
+<important_rules>
+    1. Ensure dev server is running before attempting screenshot capture
+    2. Always create screenshots/ directory before capturing
+    3. Move files from .playwright-mcp/ to final location immediately after capture
+    4. Report all errors with specific template and click state that failed
+</important_rules>
 
-1. **Build URL**:
-   ```
-   if n == 0:
-       url = "http://localhost:3030/" + slide_number
-   else:
-       url = "http://localhost:3030/" + slide_number + "?clicks=" + n
-   ```
+<expected_results>
+    Based on current templates.json (9 templates, 27 total screenshots):
 
-2. **Navigate**:
-   ```
-   mcp__playwright__browser_navigate(url: "<full_url>")
-   ```
-
-3. **Wait for render**:
-   ```
-   mcp__playwright__browser_wait_for(time: 1)
-   ```
-
-4. **Capture screenshot**:
-   ```
-   mcp__playwright__browser_take_screenshot(
-       filename: "slide-templates/{template}/screenshots/click-{n}.png"
-   )
-   ```
-
-5. **Move file** (Playwright saves to `.playwright-mcp/` prefix):
-   ```bash
-   mv .playwright-mcp/slide-templates/{template}/screenshots/click-{n}.png slide-templates/{template}/screenshots/click-{n}.png
-   ```
-
-### 2d. Repeat for all templates
-
-Continue through the entire `slides` array until all templates have been captured.
-
----
-
-## Step 3: Report Summary
-
-After all screenshots are captured, provide a completion summary.
-
-**Success message format**:
-
-```
-## Sync All Complete ✅
-
-Templates synced: {count} templates
-Total screenshots: {total} files
-
-### Per-Template Breakdown:
-| Template | Clicks | Screenshots |
-|----------|--------|-------------|
-| title | 0 | 1 |
-| intro-what-well-cover | 3 | 4 |
-| about-me | 0 | 1 |
-| ... | ... | ... |
-
-All screenshots saved to slide-templates/{template}/screenshots/
-```
-
-**If any errors occurred**, list the specific templates and click states that failed.
-
----
-
-## Expected Results
-
-Based on current templates.json, sync-all should capture:
-
-| Template | Clicks | Screenshots |
-|----------|--------|-------------|
-| title | 0 | 1 |
-| intro-what-well-cover | 3 | 4 |
-| about-me | 0 | 1 |
-| icon-list-content | 2 | 3 |
-| continuum-diagram | 4 | 5 |
-| extremes-to-middle | 2 | 3 |
-| continuum-middle-ground | 3 | 4 |
-| three-to-one-takeaway | 4 | 5 |
-| conclusion-lets-connect | 0 | 1 |
-
-**Total**: 9 templates, 27 screenshots
+    | Template | Clicks | Screenshots |
+    |----------|--------|-------------|
+    | title | 0 | 1 |
+    | column-cards | 3 | 4 |
+    | about-me | 0 | 1 |
+    | icon-list-content | 2 | 3 |
+    | continuum-diagram | 4 | 5 |
+    | extremes-to-middle | 2 | 3 |
+    | continuum-middle-ground | 3 | 4 |
+    | three-to-one-takeaway | 4 | 5 |
+    | conclusion-lets-connect | 0 | 1 |
+</expected_results>

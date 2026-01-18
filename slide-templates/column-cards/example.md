@@ -23,7 +23,7 @@ layout: default
       <ul class="text-sm space-y-1">
         <li>title</li>
         <li>about-me (speaker)</li>
-        <li>intro-what-well-cover</li>
+        <li>column-cards</li>
       </ul>
     </div>
   </div>

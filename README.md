@@ -45,7 +45,7 @@ This reads `templates.json` and copies the appropriate source file (`slide.md` o
 |----------|------|-------------|
 | `title` | Layout-based | Opening slide with title, subtitle, and QR code |
 | `about-me` | Layout-based | Speaker introduction using the `speaker` layout |
-| `intro-what-well-cover` | Complex | Overview slide with topic cards |
+| `column-cards` | Complex | Flexible column layout with icon cards |
 | `icon-list-content` | Complex | Sections with icons and bullet points |
 | `continuum-diagram` | Complex | Items positioned along a gradient spectrum |
 | `continuum-middle-ground` | Complex | Left/right extremes with a middle sweet spot |
@@ -61,7 +61,7 @@ Edit `templates.json` to control which templates appear and in what order:
 {
   "slides": [
     { "order": "00", "template": "title", "source": "slide.md" },
-    { "order": "01", "template": "intro-what-well-cover", "source": "example.md" }
+    { "order": "01", "template": "column-cards", "source": "example.md" }
   ]
 }
 ```

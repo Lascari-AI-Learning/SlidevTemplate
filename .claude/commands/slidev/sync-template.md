@@ -6,176 +6,195 @@ arguments: --template=<template-name>
 
 template_name = $ARGUMENTS
 
-# Sync Template Screenshots
+<purpose>
+    - Capture progressive screenshots for a single slide template
+    - Document all click states showing content reveal progression
+    - Enable visual understanding of template layout and storytelling flow
+</purpose>
 
-Capture screenshots for a single slide template showing all click states.
+<key_knowledge>
+    - templates.json structure for looking up template metadata
+    - Slidev URL structure with click state query parameters
+    - Playwright MCP screenshot capture tools
+    - Template folder structure: slide-templates/{name}/screenshots/
+</key_knowledge>
 
-## Overview
+<goal>
+    - Capture screenshots for all click states of the specified template
+    - Save screenshots to the template's screenshots/ folder
+    - Report completion with list of captured files
+</goal>
 
-This workflow captures progressive screenshots of a specific slide template, showing each v-click reveal state. Screenshots help agents understand:
-- The visual layout and styling of the template
-- How content progressively reveals through click states
-- The storytelling flow of the slide
+<background>
+    - Screenshots help agents understand template visual layouts
+    - Progressive captures show how content reveals through v-click animations
+    - Used after creating new templates or updating existing ones
+    - Screenshots are captured from localhost dev server
+</background>
 
-## Required Input
+<workflow>
+    <overview>
+        1. Find template in templates.json and extract metadata
+        2. Calculate slide URL from order field
+        3. Capture screenshot for each click state (0 to clicks)
+        4. Save files and report completion
+    </overview>
 
-Extract the template name from the arguments:
-- `--template=<name>` - The kebab-case template identifier (e.g., `title`, `intro-what-well-cover`)
+    <inputs>
+        <input name="template_name" type="string" required="true">
+            The kebab-case template identifier (e.g., "title", "column-cards")
+            Provided via --template argument or ask user if not provided
+        </input>
+    </inputs>
 
-If no template is provided, ask the user which template to sync.
+    <steps>
+        <step name="find_template">
+            <description>
+                - Read templates.json
+                - Locate entry where template field matches the argument
+                - Extract order, clicks, and template fields
+            </description>
+            <data_structure>
+                {
+                  "slides": [
+                    { "order": "00", "template": "title", "source": "slide.md", "clicks": 0 },
+                    { "order": "01", "template": "column-cards", "source": "example.md", "clicks": 3 },
+                    ...
+                  ]
+                }
+            </data_structure>
+            <fields_to_extract>
+                - order: Slide position (e.g., "00", "01", "04")
+                - clicks: Number of click states to capture (0 = initial state only)
+                - template: Template name for folder path
+            </fields_to_extract>
+            <error_handling>
+                If no matching template found:
+                - Report error to user
+                - List all available template names from templates.json
+            </error_handling>
+        </step>
 
-## Workflow Steps
+        <step name="calculate_url">
+            <description>
+                - Calculate slide URL from the order field
+                - Determine all click state URLs to capture
+            </description>
+            <base_url>
+                http://localhost:3030/ (dev server - must be running via npm run dev)
+            </base_url>
+            <formula>
+                slide_number = parseInt(order) + 1
+            </formula>
+            <examples>
+                - order "00" → slide_number 1 → URL: /1
+                - order "04" → slide_number 5 → URL: /5
+                - order "99" → slide_number 100 → URL: /100
+            </examples>
+            <click_state_urls>
+                - Initial state (n=0): /{slide_number} (no query param)
+                - Click state n > 0: /{slide_number}?clicks={n}
+            </click_state_urls>
+            <url_examples>
+                title (order="00", clicks=0):
+                  - Only URL: http://localhost:3030/1
 
-1. **Find Template** - Look up template in templates.json
-2. **Calculate URL** - Determine the live slide URL from the order field
-3. **Capture Screenshots** - Navigate to each click state and capture
-4. **Save Files** - Store screenshots in the template's screenshots/ folder
+                column-cards (order="01", clicks=3):
+                  - click-0: http://localhost:3030/2
+                  - click-1: http://localhost:3030/2?clicks=1
+                  - click-2: http://localhost:3030/2?clicks=2
+                  - click-3: http://localhost:3030/2?clicks=3
+            </url_examples>
+        </step>
 
----
+        <step name="ensure_directory">
+            <description>
+                - Create screenshots/ subdirectory if it doesn't exist
+            </description>
+            <command>
+                mkdir -p slide-templates/{template}/screenshots/
+            </command>
+            <directory_structure>
+                slide-templates/{template}/
+                ├── description.md
+                ├── example.md
+                ├── slide.md
+                └── screenshots/
+                    ├── click-0.png   # Initial state
+                    ├── click-1.png   # After first click (if clicks > 0)
+                    └── ...           # Up to click-{clicks}.png
+            </directory_structure>
+        </step>
 
-## Step 1: Find Template
+        <step name="capture_screenshots">
+            <description>
+                - Loop through each click state from 0 to clicks (inclusive)
+                - Navigate, wait, capture, and move for each state
+            </description>
+            <loop>
+                For n from 0 to clicks (inclusive):
 
-Read `templates.json` and locate the entry matching the requested template name.
+                1. Build URL:
+                   if n == 0: url = BASE_URL + slide_number
+                   else: url = BASE_URL + slide_number + "?clicks=" + n
 
-**Action**: Read templates.json and find the slide entry where `template` matches the argument.
+                2. Navigate:
+                   mcp__playwright__browser_navigate(url: full_url)
 
-```
-templates.json structure:
-{
-  "slides": [
-    { "order": "00", "template": "title", "source": "slide.md", "clicks": 0 },
-    { "order": "01", "template": "intro-what-well-cover", "source": "example.md", "clicks": 3 },
-    ...
-  ]
-}
-```
+                3. Wait for render:
+                   mcp__playwright__browser_wait_for(time: 1)
 
-**Extract these fields from the matching entry**:
-- `order` - The slide's position (e.g., "00", "01", "04")
-- `clicks` - Number of click states to capture (0 means just the initial state)
-- `template` - The template name (for folder path)
+                4. Capture screenshot:
+                   mcp__playwright__browser_take_screenshot(
+                       filename: "slide-templates/{template}/screenshots/click-{n}.png"
+                   )
 
-**Error handling**: If no matching template is found, report the error and list available templates.
+                5. Move file from Playwright prefix:
+                   mv .playwright-mcp/slide-templates/{template}/screenshots/click-{n}.png \
+                      slide-templates/{template}/screenshots/click-{n}.png
+            </loop>
+            <constraints>
+                - Playwright MCP saves to .playwright-mcp/ prefix - must move after capture
+                - Wait 1 second between navigate and capture for render completion
+            </constraints>
+        </step>
 
----
+        <step name="report_completion">
+            <description>
+                - Summarize results after all screenshots captured
+                - List all files created
+                - Report any errors encountered
+            </description>
+        </step>
+    </steps>
 
-## Step 2: Calculate URL
+    <global_constraints>
+        - Dev server must be running (npm run dev) before capture
+        - Use localhost for new/updated templates (live URL only current after deploy)
+        - Move files from .playwright-mcp/ immediately after each capture
+    </global_constraints>
 
-Calculate the slide URL from the order field.
+    <output_format>
+        ## Sync Complete
 
-**Base URL**: `http://localhost:3030/` (local dev server - must be running via `npm run dev`)
+        Template: {template}
+        Screenshots captured: {clicks + 1} files
+        Location: slide-templates/{template}/screenshots/
 
-**Formula**:
-```
-slide_number = parseInt(order) + 1
-```
+        Files created:
+        - click-0.png
+        - click-1.png (if applicable)
+        - click-2.png (if applicable)
+        - ...
 
-**Examples**:
-- order "00" → slide_number 1 → URL: `/1`
-- order "04" → slide_number 5 → URL: `/5`
-- order "99" → slide_number 100 → URL: `/100`
+        ### Errors (if any):
+        - Failed at click-{n}: {error message}
+    </output_format>
+</workflow>
 
-**Click state URLs**:
-- Initial state (clicks=0): `/{slide_number}` (no query param needed)
-- Click state n: `/{slide_number}?clicks={n}`
-
-**Example for title template (order="00", clicks=0)**:
-- Only URL: `http://localhost:3030/1`
-
-**Example for intro-what-well-cover (order="01", clicks=3)**:
-- click-0: `http://localhost:3030/2`
-- click-1: `http://localhost:3030/2?clicks=1`
-- click-2: `http://localhost:3030/2?clicks=2`
-- click-3: `http://localhost:3030/2?clicks=3`
-
-**Note**: Use localhost for capturing screenshots of new or updated templates. The live URL (`https://lascari-ai-learning.github.io/SlidevTemplate/`) is only up-to-date after deployment.
-
----
-
-## Step 3: Capture Screenshots
-
-Iterate through each click state and capture a screenshot using Playwright MCP tools.
-
-**Loop**: For `n` from 0 to `clicks` (inclusive):
-
-### 3a. Build URL for this click state
-
-```
-if n == 0:
-    url = BASE_URL + slide_number
-else:
-    url = BASE_URL + slide_number + "?clicks=" + n
-```
-
-### 3b. Navigate to the URL
-
-Use `mcp__playwright__browser_navigate`:
-```
-mcp__playwright__browser_navigate(url: "<full_url>")
-```
-
-### 3c. Wait for slide to render
-
-Use `mcp__playwright__browser_wait_for` to ensure the slide is fully loaded:
-```
-mcp__playwright__browser_wait_for(time: 1)
-```
-
-### 3d. Take screenshot
-
-Use `mcp__playwright__browser_take_screenshot` with the appropriate filename:
-```
-mcp__playwright__browser_take_screenshot(
-    filename: "slide-templates/{template}/screenshots/click-{n}.png"
-)
-```
-
-**Important**: Playwright MCP saves files to `.playwright-mcp/` prefix. After capture, move the file:
-```bash
-mv .playwright-mcp/slide-templates/{template}/screenshots/click-{n}.png slide-templates/{template}/screenshots/click-{n}.png
-```
-
----
-
-## Step 4: Ensure Screenshots Directory Exists
-
-Before capturing screenshots, ensure the screenshots/ subdirectory exists.
-
-**Action**: Create the directory if it doesn't exist:
-```bash
-mkdir -p slide-templates/{template}/screenshots/
-```
-
-**Directory structure**:
-```
-slide-templates/{template}/
-├── description.md   # Usage documentation
-├── example.md       # Example usage (if applicable)
-├── slide.md         # Template with placeholders
-└── screenshots/     # Click-state images (created by this workflow)
-    ├── click-0.png  # Initial state
-    ├── click-1.png  # After first click (if clicks > 0)
-    └── ...          # Up to click-{clicks}.png
-```
-
----
-
-## Step 5: Report Completion
-
-After all screenshots are captured, summarize the results:
-
-**Success message format**:
-```
-## Sync Complete
-
-Template: {template}
-Screenshots captured: {clicks + 1} files
-Location: slide-templates/{template}/screenshots/
-
-Files created:
-- click-0.png
-- click-1.png (if applicable)
-- ...
-```
-
-**If any errors occurred**, report them with the specific click state that failed.
+<important_rules>
+    1. Always verify template exists in templates.json before attempting capture
+    2. Ensure dev server is running - screenshots require live rendering
+    3. Move files from .playwright-mcp/ to final location after each capture
+    4. Report errors with specific click state that failed
+</important_rules>
