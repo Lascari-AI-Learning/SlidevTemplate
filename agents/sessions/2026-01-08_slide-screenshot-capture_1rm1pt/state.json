@@ -83,8 +83,8 @@
     "status": "in_progress",
     "checkpoints_total": 4,
     "checkpoints_detailed": 4,
-    "checkpoints_completed": [1],
-    "current_checkpoint": 2,
-    "last_updated": "2026-01-18T14:40:00Z"
+    "checkpoints_completed": [1, 2],
+    "current_checkpoint": 3,
+    "last_updated": "2026-01-18T15:30:00Z"
   }
 }
