@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: 4
 ---
 
 <div class="text-4xl text-center mb-8">Continuum Diagram Template</div>
@@ -31,14 +32,11 @@ layout: default
 </div>
 
 <div class="grid grid-cols-9 gap-4 mt-8 text-xs">
-  <v-click>
-  <div class="col-span-2 text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg">
+  <div v-if="$clicks >= 1" class="col-span-2 text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg">
     <p>Left characteristic 1</p>
     <p>Left characteristic 2</p>
   </div>
-  </v-click>
-  <v-click at="3">
-  <div class="col-span-5 items-center text-center mt-2.5">
+  <div v-if="$clicks >= 3" class="col-span-5 items-center text-center mt-2.5">
     <div class="p-0.5 rounded-lg shadow-lg" style="background: linear-gradient(to right, #fb7185, #a78bfa, #38bdf8);">
       <div class="bg-white rounded-md py-4 px-2">
         <p class="text-lg mb-2 text-center">The Sweet Spot:</p>
@@ -48,17 +46,12 @@ layout: default
       </div>
     </div>
   </div>
-  </v-click>
-  <v-click at="2">
-  <div class="col-span-2 text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg">
+  <div v-if="$clicks >= 2" class="col-span-2 text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg">
     <p>Right characteristic 1</p>
     <p>Right characteristic 2</p>
   </div>
-  </v-click>
 </div>
 
-<v-click at="4">
-<div class="text-center mt-8">
+<div v-if="$clicks >= 4" class="text-center mt-8">
   <p class="text-xl font-semibold">Find Your Sweet Spot</p>
 </div>
-</v-click>

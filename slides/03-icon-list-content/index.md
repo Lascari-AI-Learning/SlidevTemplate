@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: 2
 ---
 
 # Icon List Content Template
@@ -22,8 +23,7 @@ layout: default
       </ul>
     </div>
   </div>
-  <v-click>
-  <div class="flex flex-col space-y-2">
+  <div v-if="$clicks >= 1" class="flex flex-col space-y-2">
     <div class="flex flex-row items-center space-x-4">
       <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,9 +39,7 @@ layout: default
       </ul>
     </div>
   </div>
-  </v-click>
-  <v-click>
-  <div class="flex flex-col space-y-2">
+  <div v-if="$clicks >= 2" class="flex flex-col space-y-2">
     <div class="flex flex-row items-center space-x-4">
       <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,5 +55,4 @@ layout: default
       </ul>
     </div>
   </div>
-  </v-click>
 </div>
