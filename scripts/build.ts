@@ -9,7 +9,7 @@ export const repoRoot = path.join(__dirname, "..");
 export const slidesDir = path.join(repoRoot, "slides");
 
 // Get all slides and sort them
-const slides = globbySync("*.md", { cwd: slidesDir }).sort();
+const slides = globbySync("*/index.md", { cwd: slidesDir }).sort();
 
 // Build the new index content from scratch
 // No need to read existing file or preserve frontmatter
