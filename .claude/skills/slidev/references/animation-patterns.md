@@ -81,7 +81,37 @@ Content appears at one click and **disappears** at a later click. Used for step-
 - The last scene typically uses `$clicks >= N` (no upper bound) so it persists
 - See `to_add/08-how-skills-work.md` for a complete 7-scene example
 
-### 3. Reactive Styling
+### 3. Layout-Preserving Reveal
+
+Content appears on click and **stays visible**, but uses opacity instead of `v-if` so the element **always occupies its grid/flex space**. This prevents layout shifts when sibling elements depend on consistent spacing.
+
+**When to use**: Grid or flex layouts where removing an element from the DOM would cause remaining elements to shift or collapse (e.g., 3-column grids, characteristics rows with a center block).
+
+```html
+<div class="grid grid-cols-3 gap-6">
+  <!-- All three columns always occupy space; opacity controls visibility -->
+  <div
+    :class="$clicks >= 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+    class="card transition-opacity duration-300"
+  >Card 1</div>
+  <div
+    :class="$clicks >= 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+    class="card transition-opacity duration-300"
+  >Card 2</div>
+  <div
+    :class="$clicks >= 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+    class="card transition-opacity duration-300"
+  >Card 3</div>
+</div>
+```
+
+**Key details**:
+- Use `:class` ternary instead of `v-if` — the element stays in the DOM
+- `pointer-events-none` prevents interaction with invisible elements
+- `transition-opacity duration-300` provides a smooth fade-in
+- **Prefer this over Additive Reveal** when elements are inside a shared grid/flex container and spacing must remain stable across click states
+
+### 4. Reactive Styling
 
 Element stays visible but **changes appearance** based on click state. Used for emphasis/de-emphasis effects.
 
@@ -107,38 +137,47 @@ Element stays visible but **changes appearance** based on click state. Used for 
 
 | Use Case | Pattern | Example |
 |----------|---------|---------|
-| Items appear one by one and stay | Additive | Cards, bullet lists, grid items |
+| Items appear one by one and stay | Additive | Standalone sections, independent blocks |
+| Items in a shared grid/flex that must maintain spacing | Layout-Preserving | 3-column card grids, continuum characteristics |
 | Step-by-step walkthrough | Scene Replacement | Tutorial steps, flow diagrams |
-| Earlier items fade when new ones appear | Additive + Reactive | Continuum with middle emphasis |
+| Earlier items fade when new ones appear | Layout-Preserving + Reactive | Continuum with middle emphasis |
 | Content cycles through states | Scene Replacement | Before/after, A vs B |
 | Non-sequential reveal order | Additive (custom numbering) | DOM order differs from click order |
 
+### Additive vs. Layout-Preserving: When to Choose
+
+- **Additive (`v-if`)**: Use when elements are independent — each stands alone or is in a vertical stack where adding/removing doesn't shift siblings.
+- **Layout-Preserving (`opacity`)**: Use when elements share a grid or flex container and their presence affects the layout of siblings. If removing one element would cause others to reflow or collapse, use opacity instead of `v-if`.
+
 ## Mixing Patterns
 
-Patterns can be combined on the same slide. A common combination is **additive + reactive**:
+Patterns can be combined on the same slide. A common combination is **layout-preserving + reactive** for grids where items fade but must keep their space:
 
 ```html
-<!-- Appears at click 1, fades at click 3 -->
-<div
-  v-if="$clicks >= 1"
-  :class="{ 'opacity-40': $clicks >= 3 }"
-  style="transition: opacity 0.5s;"
->
-  Left extreme
-</div>
+<div class="grid grid-cols-9 gap-4">
+  <!-- Appears at click 1, fades at click 3 — always occupies grid space -->
+  <div
+    :class="$clicks >= 1 ? ($clicks >= 3 ? 'opacity-40' : 'opacity-100') : 'opacity-0 pointer-events-none'"
+    class="col-span-2 card transition-opacity duration-300"
+  >
+    Left extreme
+  </div>
 
-<!-- Appears at click 2, fades at click 3 -->
-<div
-  v-if="$clicks >= 2"
-  :class="{ 'opacity-40': $clicks >= 3 }"
-  style="transition: opacity 0.5s;"
->
-  Right extreme
-</div>
+  <!-- Center block: invisible until click 3, preserves grid spacing -->
+  <div
+    :class="$clicks >= 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+    class="col-span-5 transition-opacity duration-300"
+  >
+    The sweet spot (highlighted by contrast)
+  </div>
 
-<!-- Appears at click 3 (the emphasis target) -->
-<div v-if="$clicks >= 3">
-  The sweet spot (highlighted by contrast)
+  <!-- Appears at click 2, fades at click 3 — always occupies grid space -->
+  <div
+    :class="$clicks >= 2 ? ($clicks >= 3 ? 'opacity-40' : 'opacity-100') : 'opacity-0 pointer-events-none'"
+    class="col-span-2 card transition-opacity duration-300"
+  >
+    Right extreme
+  </div>
 </div>
 ```
 
@@ -159,8 +198,10 @@ When DOM order differs from desired click order, simply assign click numbers tha
 When adding click animations to any slide:
 
 1. **Add `clicks: N` to frontmatter** — N = total number of click states
-2. **Use `v-if="$clicks >= N"`** — never `<v-click>` or `<v-clicks>`
-3. **Use `$clicks`** — never `$slidev.nav.clicks`
-4. **Never add `.slidev-vclick-hidden` styles** — not needed with v-if approach
-5. **Add transitions via inline style** — `style="transition: opacity 0.5s;"` for reactive styling
-6. **Test by reloading the slide page** — verify no flash on initial load
+2. **Choose the right reveal method**:
+   - `v-if="$clicks >= N"` for standalone elements (Additive)
+   - `:class="$clicks >= N ? 'opacity-100' : 'opacity-0 pointer-events-none'"` for elements in shared grid/flex containers (Layout-Preserving)
+3. **Use `$clicks`** — never `$slidev.nav.clicks`, `<v-click>`, or `<v-clicks>`
+4. **Never add `.slidev-vclick-hidden` styles** — not needed with these approaches
+5. **Add transitions** — `transition-opacity duration-300` for layout-preserving reveals, `style="transition: opacity 0.5s;"` for reactive styling
+6. **Test by reloading the slide page** — verify no flash on initial load and no layout shifts

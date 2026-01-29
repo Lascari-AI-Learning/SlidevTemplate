@@ -39,7 +39,7 @@ clicks: {{clicks}}
   <!-- Characteristics -->
   <div class="grid grid-cols-9 gap-4 mt-8 text-xs">
     {{#each characteristics}}
-    <div {{#if v_click}}v-if="$clicks >= {{v_click_at}}" {{/if}}class="{{#if span}}col-span-{{span}}{{else}}col-span-2{{/if}} {{#if center}}items-center text-center{{#if center_margin}} mt-2.5{{/if}}{{else}}text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg{{/if}}">
+    <div {{#if v_click}}:class="$clicks >= {{v_click_at}} ? 'opacity-100' : 'opacity-0 pointer-events-none'" {{/if}}class="{{#if span}}col-span-{{span}}{{else}}col-span-2{{/if}} {{#if center}}items-center text-center{{#if center_margin}} mt-2.5{{/if}}{{else}}text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg{{/if}} transition-opacity duration-300">
       {{#if special_content}}
       <div class="p-0.5 rounded-lg shadow-lg" style="background: linear-gradient(to right, {{special_gradient}});">
         <div class="bg-white rounded-md py-4 px-2">

@@ -176,15 +176,18 @@ The `clicks` field in `templates.json` indicates the total number of v-click tra
 
 Every animated slide needs `clicks: N` in its frontmatter.
 
-### Three Patterns
+### Four Patterns
 
 | Pattern | Syntax | Use Case |
 |---------|--------|----------|
-| **Additive Reveal** | `v-if="$clicks >= N"` | Items appear and stay (cards, lists) |
+| **Additive Reveal** | `v-if="$clicks >= N"` | Items appear and stay (standalone sections, vertical stacks) |
+| **Layout-Preserving Reveal** | `:class="$clicks >= N ? 'opacity-100' : 'opacity-0 pointer-events-none'"` | Items in a shared grid/flex that must maintain spacing (card grids, column layouts) |
 | **Scene Replacement** | `v-if="$clicks >= N && $clicks < M"` | Steps replace each other (walkthroughs) |
 | **Reactive Styling** | `:class="{ 'opacity-40': $clicks >= N }"` | Element changes appearance (fade, highlight) |
 
-These patterns can be combined — e.g., an element that appears at click 1 (`v-if`) and fades at click 3 (`:class`).
+**Additive vs. Layout-Preserving**: Use `v-if` (Additive) when elements are independent. Use `opacity` (Layout-Preserving) when elements share a grid/flex container and removing one would shift siblings. Layout-Preserving keeps elements in the DOM but invisible, so spacing stays stable.
+
+These patterns can be combined — e.g., an element that appears at click 1 (opacity) and fades at click 3 (`:class`).
 
 See **[Animation Patterns](references/animation-patterns.md)** for full code examples, decision guide, and implementation checklist.
 

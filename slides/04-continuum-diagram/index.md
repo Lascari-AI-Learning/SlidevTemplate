@@ -36,7 +36,7 @@ clicks: 4
     <p>Left characteristic 1</p>
     <p>Left characteristic 2</p>
   </div>
-  <div v-if="$clicks >= 3" class="col-span-5 items-center text-center mt-2.5">
+  <div :class="$clicks >= 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'" class="col-span-5 items-center text-center mt-2.5 transition-opacity duration-300">
     <div class="p-0.5 rounded-lg shadow-lg" style="background: linear-gradient(to right, #fb7185, #a78bfa, #38bdf8);">
       <div class="bg-white rounded-md py-4 px-2">
         <p class="text-lg mb-2 text-center">The Sweet Spot:</p>
