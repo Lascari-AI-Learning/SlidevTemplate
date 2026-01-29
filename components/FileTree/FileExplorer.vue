@@ -5,6 +5,7 @@ import FileTreeItem from './FileTreeItem.vue'
 
 const props = defineProps<{
   dir: string
+  title?: string
   showWorkingDir?: boolean
 }>()
 
@@ -149,10 +150,28 @@ const toggleFolder = (node: FileNode) => {
 }
 
 const getFileIcon = (name: string) => {
-  if (name.endsWith('.py')) return 'i-vscode-icons:file-type-python'
-  if (name.endsWith('.md')) return 'i-vscode-icons:file-type-markdown'
-  if (name.endsWith('.ts')) return 'i-vscode-icons:file-type-typescript'
-  if (name.endsWith('.json')) return 'i-vscode-icons:file-type-json'
+  const lower = name.toLowerCase()
+  if (lower.endsWith('.py')) return 'i-vscode-icons:file-type-python'
+  if (lower.endsWith('.md')) return 'i-vscode-icons:file-type-markdown'
+  if (lower.endsWith('.ts')) return 'i-vscode-icons:file-type-typescript'
+  if (lower.endsWith('.tsx')) return 'i-vscode-icons:file-type-typescript'
+  if (lower.endsWith('.js')) return 'i-vscode-icons:file-type-js'
+  if (lower.endsWith('.jsx')) return 'i-vscode-icons:file-type-js'
+  if (lower.endsWith('.json')) return 'i-vscode-icons:file-type-json'
+  if (lower.endsWith('.vue')) return 'i-vscode-icons:file-type-vue'
+  if (lower.endsWith('.yaml') || lower.endsWith('.yml')) return 'i-vscode-icons:file-type-yaml'
+  if (lower.endsWith('.html')) return 'i-vscode-icons:file-type-html'
+  if (lower.endsWith('.css')) return 'i-vscode-icons:file-type-css'
+  if (lower.endsWith('.scss')) return 'i-vscode-icons:file-type-scss'
+  if (lower.endsWith('.sh') || lower.endsWith('.bash') || lower.endsWith('.zsh')) return 'i-vscode-icons:file-type-shell'
+  if (lower.endsWith('.toml')) return 'i-vscode-icons:file-type-toml'
+  if (lower.endsWith('.txt')) return 'i-vscode-icons:file-type-text'
+  if (lower.endsWith('.env')) return 'i-vscode-icons:file-type-dotenv'
+  if (lower.endsWith('.gitignore')) return 'i-vscode-icons:file-type-git'
+  if (lower.endsWith('.rs')) return 'i-vscode-icons:file-type-rust'
+  if (lower.endsWith('.go')) return 'i-vscode-icons:file-type-go'
+  if (lower === 'dockerfile') return 'i-vscode-icons:file-type-docker'
+  if (lower === 'makefile') return 'i-vscode-icons:file-type-makefile'
   return 'i-vscode-icons:default-file'
 }
 
@@ -230,10 +249,12 @@ watch(() => selectedFile.value, async (newFile) => {
 </script>
 
 <template>
-  <div class="flex h-[400px] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm text-sm font-mono bg-white dark:bg-[#1e1e1e] text-left">
+  <div class="flex flex-col h-full">
+    <div v-if="title" class="text-4xl text-center mb-6 text-gray-900 font-bold">{{ title }}</div>
+    <div class="flex flex-1 border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden shadow-lg text-sm font-mono bg-white dark:bg-[#1e1e1e] text-left">
     <!-- Sidebar -->
-    <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#252526] overflow-y-auto">
-      <div class="p-2 text-xs font-bold text-gray-500 uppercase tracking-wider pl-4">Explorer</div>
+    <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#252526] overflow-y-auto">
+      <div class="p-2.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider pl-4 border-b border-gray-200 dark:border-gray-700">Explorer</div>
       <div v-if="showWorkingDir" class="px-4 py-2 text-xs text-gray-400 dark:text-gray-500 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center gap-1">
           <span class="i-carbon:folder text-xs"></span>
@@ -258,8 +279,8 @@ watch(() => selectedFile.value, async (newFile) => {
     <div class="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#1e1e1e]">
       <div v-if="selectedFile" class="flex-1 flex flex-col min-h-0">
         <!-- Tab Header -->
-        <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#2d2d2d]">
-          <div class="px-3 py-2 bg-white dark:bg-[#1e1e1e] border-t-2 border-t-blue-500 text-gray-800 dark:text-gray-100 flex items-center gap-2">
+        <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#2d2d2d]">
+          <div class="px-4 py-2 bg-white dark:bg-[#1e1e1e] border-t-2 border-t-blue-500 text-gray-800 dark:text-gray-100 flex items-center gap-2 text-sm">
              <span :class="[getFileIcon(selectedFile.name), 'text-sm']"></span>
             {{ selectedFile.name }}
             <span class="ml-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-0.5 cursor-pointer" @click="selectedFile = null">
@@ -269,26 +290,42 @@ watch(() => selectedFile.value, async (newFile) => {
         </div>
 
         <!-- Code Content -->
-        <div class="flex-1 overflow-auto p-4 bg-[#0d1117]">
-          <div
-            v-if="highlightedContent && !isHighlighting"
-            class="shiki-wrapper"
-            v-html="highlightedContent"
-          ></div>
-          <pre
-            v-else
-            class="font-mono text-sm leading-relaxed text-gray-300 whitespace-pre-wrap"
-          >{{ selectedFile.content }}</pre>
+        <div class="flex-1 overflow-auto p-4 bg-[#0d1117] dark:bg-[#0d1117]">
+          <Transition name="fade" mode="out-in">
+            <div
+              v-if="highlightedContent && !isHighlighting"
+              :key="selectedFile?.path"
+              class="shiki-wrapper"
+              v-html="highlightedContent"
+            ></div>
+            <pre
+              v-else
+              :key="'fallback-' + (selectedFile?.path || '')"
+              class="font-mono text-sm leading-relaxed text-gray-300 whitespace-pre-wrap"
+            >{{ selectedFile.content }}</pre>
+          </Transition>
         </div>
       </div>
-      <div v-else class="flex-1 flex items-center justify-center text-gray-400">
+      <div v-else class="flex-1 flex items-center justify-center text-gray-400 text-base">
         Select a file to view
       </div>
+    </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* Fade transition for code panel file switches */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .shiki-wrapper {
   margin: 0;
 }

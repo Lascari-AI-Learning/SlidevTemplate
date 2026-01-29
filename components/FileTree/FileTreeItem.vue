@@ -27,10 +27,28 @@ const isExpanded = computed(() => props.expandedFolders.has(props.node.path))
 const isSelected = computed(() => props.selectedFile?.path === props.node.path)
 
 const getFileIcon = (name: string) => {
-  if (name.endsWith('.py')) return 'i-vscode-icons:file-type-python'
-  if (name.endsWith('.md')) return 'i-vscode-icons:file-type-markdown'
-  if (name.endsWith('.ts')) return 'i-vscode-icons:file-type-typescript'
-  if (name.endsWith('.json')) return 'i-vscode-icons:file-type-json'
+  const lower = name.toLowerCase()
+  if (lower.endsWith('.py')) return 'i-vscode-icons:file-type-python'
+  if (lower.endsWith('.md')) return 'i-vscode-icons:file-type-markdown'
+  if (lower.endsWith('.ts')) return 'i-vscode-icons:file-type-typescript'
+  if (lower.endsWith('.tsx')) return 'i-vscode-icons:file-type-typescript'
+  if (lower.endsWith('.js')) return 'i-vscode-icons:file-type-js'
+  if (lower.endsWith('.jsx')) return 'i-vscode-icons:file-type-js'
+  if (lower.endsWith('.json')) return 'i-vscode-icons:file-type-json'
+  if (lower.endsWith('.vue')) return 'i-vscode-icons:file-type-vue'
+  if (lower.endsWith('.yaml') || lower.endsWith('.yml')) return 'i-vscode-icons:file-type-yaml'
+  if (lower.endsWith('.html')) return 'i-vscode-icons:file-type-html'
+  if (lower.endsWith('.css')) return 'i-vscode-icons:file-type-css'
+  if (lower.endsWith('.scss')) return 'i-vscode-icons:file-type-scss'
+  if (lower.endsWith('.sh') || lower.endsWith('.bash') || lower.endsWith('.zsh')) return 'i-vscode-icons:file-type-shell'
+  if (lower.endsWith('.toml')) return 'i-vscode-icons:file-type-toml'
+  if (lower.endsWith('.txt')) return 'i-vscode-icons:file-type-text'
+  if (lower.endsWith('.env')) return 'i-vscode-icons:file-type-dotenv'
+  if (lower.endsWith('.gitignore')) return 'i-vscode-icons:file-type-git'
+  if (lower.endsWith('.rs')) return 'i-vscode-icons:file-type-rust'
+  if (lower.endsWith('.go')) return 'i-vscode-icons:file-type-go'
+  if (lower === 'dockerfile') return 'i-vscode-icons:file-type-docker'
+  if (lower === 'makefile') return 'i-vscode-icons:file-type-makefile'
   return 'i-vscode-icons:default-file'
 }
 </script>
@@ -39,8 +57,8 @@ const getFileIcon = (name: string) => {
   <div>
     <div v-if="node.type === 'directory'">
       <div
-        class="flex items-center px-2 py-1 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] text-gray-700 dark:text-gray-300 select-none"
-        :style="{ paddingLeft: `${depth * 12 + 8}px` }"
+        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] text-gray-700 dark:text-gray-300 select-none transition-colors duration-150"
+        :style="{ paddingLeft: `${depth * 14 + 8}px` }"
         @click="emit('toggle', node)"
       >
         <span
@@ -53,25 +71,27 @@ const getFileIcon = (name: string) => {
         <span class="truncate">{{ node.name }}/</span>
       </div>
 
-      <div v-if="isExpanded">
-        <FileTreeItem
-          v-for="child in node.children"
-          :key="child.path"
-          :node="child"
-          :expanded-folders="expandedFolders"
-          :selected-file="selectedFile"
-          :depth="depth + 1"
-          @toggle="(n) => emit('toggle', n)"
-          @select="(n) => emit('select', n)"
-        />
-      </div>
+      <Transition name="expand">
+        <div v-if="isExpanded" class="expand-wrapper">
+          <FileTreeItem
+            v-for="child in node.children"
+            :key="child.path"
+            :node="child"
+            :expanded-folders="expandedFolders"
+            :selected-file="selectedFile"
+            :depth="depth + 1"
+            @toggle="(n) => emit('toggle', n)"
+            @select="(n) => emit('select', n)"
+          />
+        </div>
+      </Transition>
     </div>
 
     <div v-else>
       <div
-        class="flex items-center px-2 py-1 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] select-none"
-        :class="{ 'bg-blue-100 dark:bg-[#37373d] text-blue-800 dark:text-white': isSelected, 'text-gray-700 dark:text-gray-300': !isSelected }"
-        :style="{ paddingLeft: `${depth * 12 + 28}px` }"
+        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] select-none transition-colors duration-150"
+        :class="{ 'bg-blue-50 dark:bg-[#37373d] text-blue-700 dark:text-white': isSelected, 'text-gray-700 dark:text-gray-300': !isSelected }"
+        :style="{ paddingLeft: `${depth * 14 + 28}px` }"
         @click="emit('select', node)"
       >
          <span :class="[getFileIcon(node.name), 'mr-2 text-base flex-shrink-0']"></span>
@@ -80,3 +100,22 @@ const getFileIcon = (name: string) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.expand-enter-active,
+.expand-leave-active {
+  transition: opacity 0.15s ease, max-height 0.2s ease;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+
+.expand-enter-to,
+.expand-leave-from {
+  max-height: 500px;
+}
+</style>
