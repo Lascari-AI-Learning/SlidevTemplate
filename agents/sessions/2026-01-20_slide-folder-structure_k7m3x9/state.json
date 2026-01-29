@@ -65,10 +65,10 @@
     "status": "in_progress",
     "checkpoints_total": 4,
     "checkpoints_detailed": 4,
-    "checkpoints_completed": [1],
-    "current_checkpoint": 2,
-    "current_task": "2.2.1",
-    "last_updated": "2026-01-29T12:40:00Z"
+    "checkpoints_completed": [1, 2],
+    "current_checkpoint": 3,
+    "current_task": "3.2.1",
+    "last_updated": "2026-01-29T13:00:00Z"
   },
   "updated_at": "2026-01-29T00:00:00Z"
 }

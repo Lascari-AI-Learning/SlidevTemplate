@@ -119,7 +119,8 @@ async function main() {
   const templateDir = path.join(repoRoot, "slide-templates", config.template);
   const templateFile = path.join(templateDir, "slide.md");
   const slidesDir = path.join(repoRoot, "slides");
-  const outputFile = path.join(slidesDir, `${config.name}.md`);
+  const outputDir = path.join(slidesDir, config.name);
+  const outputFile = path.join(outputDir, 'index.md');
 
   // Check if template exists
   try {
@@ -138,7 +139,8 @@ async function main() {
   // Process template with variables
   const processedContent = processTemplate(templateContent, config.variables);
 
-  // Write output file
+  // Create slide folder and write output file
+  await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(outputFile, processedContent);
   console.log(`✓ Generated slide: ${outputFile}`);
 
