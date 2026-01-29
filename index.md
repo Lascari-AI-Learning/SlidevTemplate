@@ -31,5 +31,9 @@ src: ./slides/07-three-to-one-takeaway/index.md
 ---
 
 ---
+src: ./slides/08-file-explorer/index.md
+---
+
+---
 src: ./slides/99-conclusion-lets-connect/index.md
 ---
