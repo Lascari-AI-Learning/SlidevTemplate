@@ -1,5 +1,6 @@
 ---
 theme: ../
+clicks: 2
 ---
 
 <div class="text-center text-4xl">
@@ -18,7 +19,7 @@ Extremes to Middle Template
   </div>
 </div>
 
-<v-click>
+<div v-if="$clicks >= 1">
 <div class="grid grid-cols-3 mb-1">
   <div class="text-center">
     <div class="text-4xl text-blue-600">↘</div>
@@ -50,9 +51,9 @@ Extremes to Middle Template
   </div>
   <div class="col-span-1"></div>
 </div>
-</v-click>
+</div>
 
-<v-click>
+<div v-if="$clicks >= 2">
 <div class="grid grid-cols-13 mb-1">
   <div class="col-span-5"></div>
   <div class="text-center">
@@ -71,4 +72,4 @@ Extremes to Middle Template
     <span class="text-2xl">Best of Both Worlds</span>
   </div>
 </div>
-</v-click>
+</div>

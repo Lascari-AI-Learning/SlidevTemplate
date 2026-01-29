@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: {{clicks}}
 ---
 
 <div class="text-4xl text-center mb-8">{{title}}</div>
@@ -38,8 +39,7 @@ layout: default
   <!-- Characteristics -->
   <div class="grid grid-cols-9 gap-4 mt-8 text-xs">
     {{#each characteristics}}
-    {{#if v_click}}<v-click{{#if v_click_at}} at="{{v_click_at}}"{{/if}}>{{/if}}
-    <div class="{{#if span}}col-span-{{span}}{{else}}col-span-2{{/if}} {{#if center}}items-center text-center{{#if center_margin}} mt-2.5{{/if}}{{else}}text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg{{/if}}">
+    <div {{#if v_click}}v-if="$clicks >= {{v_click_at}}" {{/if}}class="{{#if span}}col-span-{{span}}{{else}}col-span-2{{/if}} {{#if center}}items-center text-center{{#if center_margin}} mt-2.5{{/if}}{{else}}text-center bg-gray-100 border-1 border-gray-500 p-2 px-4 rounded-lg{{/if}}">
       {{#if special_content}}
       <div class="p-0.5 rounded-lg shadow-lg" style="background: linear-gradient(to right, {{special_gradient}});">
         <div class="bg-white rounded-md py-4 px-2">
@@ -55,17 +55,14 @@ layout: default
       {{/each}}
       {{/if}}
     </div>
-    {{#if v_click}}</v-click>{{/if}}
     {{/each}}
   </div>
 {{/if}}
 
 {{#if footer}}
-<v-click{{#if footer_v_click_at}} at="{{footer_v_click_at}}"{{/if}}>
-<div class="text-center mt-8">
+<div v-if="$clicks >= {{footer_v_click_at}}" class="text-center mt-8">
   <p class="text-xl font-semibold">{{footer}}</p>
 </div>
-</v-click>
 {{/if}}
 
 <!--

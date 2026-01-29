@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: 3
 ---
 
 {{#if use_icons}}
@@ -26,10 +27,10 @@ import { X, Check{{#if extra_icons}}, {{extra_icons}}{{/if}} } from 'lucide-vue-
   </div>
 
   <!-- Left extreme -->
-  <v-click at="1">
-    <div 
+    <div
+      v-if="$clicks >= 1"
       class="absolute left-[0%] bottom-45 w-[250px] bg-white rounded-lg shadow-lg p-6 border border-gray-400"
-      {{#if fade_extremes}}:class="{ 'opacity-40': $slidev.nav.clicks >= {{fade_at_click}} }"{{/if}}
+      {{#if fade_extremes}}:class="{ 'opacity-40': $clicks >= {{fade_at_click}} }"{{/if}}
       style="transition: opacity 0.5s;"
     >
       <div class="flex flex-col items-center gap-3">
@@ -50,13 +51,12 @@ import { X, Check{{#if extra_icons}}, {{extra_icons}}{{/if}} } from 'lucide-vue-
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 
   <!-- Right extreme -->
-  <v-click at="2">
-    <div 
+    <div
+      v-if="$clicks >= 2"
       class="absolute right-[0%] bottom-45 w-[250px] bg-white rounded-lg shadow-lg p-6 border border-gray-400"
-      {{#if fade_extremes}}:class="{ 'opacity-40': $slidev.nav.clicks >= {{fade_at_click}} }"{{/if}}
+      {{#if fade_extremes}}:class="{ 'opacity-40': $clicks >= {{fade_at_click}} }"{{/if}}
       style="transition: opacity 0.5s;"
     >
       <div class="flex flex-col items-center gap-3">
@@ -77,11 +77,9 @@ import { X, Check{{#if extra_icons}}, {{extra_icons}}{{/if}} } from 'lucide-vue-
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 
   <!-- Middle sweet spot -->
-  <v-click at="3">
-    <div class="absolute left-1/2 bottom-45 w-[250px] transform -translate-x-1/2 bg-white rounded-lg shadow-xl p-6 border-3 z-10" style="border-color: {{middle_border_color}};">
+    <div v-if="$clicks >= 3" class="absolute left-1/2 bottom-45 w-[250px] transform -translate-x-1/2 bg-white rounded-lg shadow-xl p-6 border-3 z-10" style="border-color: {{middle_border_color}};">
       <div class="flex flex-col items-center gap-3">
         {{#if middle_icon}}
         <!-- The check icon is visually present but does not take up vertical space above the text -->
@@ -102,14 +100,7 @@ import { X, Check{{#if extra_icons}}, {{extra_icons}}{{/if}} } from 'lucide-vue-
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 </div>
-
-<style>
-.slidev-vclick-hidden {
-  opacity: 0;
-}
-</style>
 
 {{#if speaker_notes}}
 <!--

@@ -95,7 +95,7 @@ Capture screenshots for **all** templates in templates.json.
 **Creates**:
 - `slide-templates/{name}/description.md` - Usage documentation
 - `slide-templates/{name}/slide.md` - Template with placeholders
-- `slide-templates/{name}/example.md` - Sample content with v-clicks
+- `slide-templates/{name}/example.md` - Sample content with $clicks animations
 - `slide-templates/{name}/screenshots/` - Click-state images
 
 ## Conventions
@@ -170,7 +170,26 @@ slide_number = parseInt(order) + 1
 
 The `clicks` field in `templates.json` indicates the total number of v-click transitions. A template with `clicks: 3` will have 4 screenshots (click-0 through click-3).
 
+## Animation & Click Patterns
+
+**REQUIRED**: All click-driven animations MUST use `$clicks`-based `v-if`. Do NOT use `<v-click>`, `<v-clicks>`, or `v-click` directives — they have a hydration bug that causes elements to flash on page load.
+
+Every animated slide needs `clicks: N` in its frontmatter.
+
+### Three Patterns
+
+| Pattern | Syntax | Use Case |
+|---------|--------|----------|
+| **Additive Reveal** | `v-if="$clicks >= N"` | Items appear and stay (cards, lists) |
+| **Scene Replacement** | `v-if="$clicks >= N && $clicks < M"` | Steps replace each other (walkthroughs) |
+| **Reactive Styling** | `:class="{ 'opacity-40': $clicks >= N }"` | Element changes appearance (fade, highlight) |
+
+These patterns can be combined — e.g., an element that appears at click 1 (`v-if`) and fades at click 3 (`:class`).
+
+See **[Animation Patterns](references/animation-patterns.md)** for full code examples, decision guide, and implementation checklist.
+
 ## References
 
 - **[Template Structure](references/templates.md)** - Folder structure and templates.json schema
 - **[Playwright Workflow](references/playwright-workflow.md)** - Screenshot capture patterns
+- **[Animation Patterns](references/animation-patterns.md)** - $clicks patterns, decision guide, and implementation checklist

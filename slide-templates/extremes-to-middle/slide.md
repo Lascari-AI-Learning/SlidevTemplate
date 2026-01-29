@@ -1,5 +1,6 @@
 ---
 theme: ../
+clicks: 2
 ---
 
 <div class="text-center text-4xl">
@@ -18,7 +19,7 @@ theme: ../
   </div>
 </div>
 {{#if show_details}}
-<v-click>
+<div v-if="$clicks >= 1">
 <div class="grid grid-cols-3 mb-1">
   <div class="text-center">
     <div class="text-4xl text-{{extreme1_color}}-600">↘</div>
@@ -52,10 +53,10 @@ theme: ../
   <div class="col-span-1"></div>
 </div>
 
-</v-click>
+</div>
 {{/if}}
 {{#if show_result}}
-<v-click>
+<div v-if="$clicks >= 2">
   <div class="grid grid-cols-13 mb-1">
   <div class="col-span-5"></div>
   <div class="text-center">
@@ -74,7 +75,7 @@ theme: ../
       <span class="text-2xl">{{result_label}}</span>
     </div>
   </div>
-</v-click>
+</div>
 {{/if}}
 {{#if speaker_notes}}
 <!--

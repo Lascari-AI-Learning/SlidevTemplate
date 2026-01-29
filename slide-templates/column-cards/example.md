@@ -1,14 +1,14 @@
 ---
 theme: ../
 layout: default
+clicks: 3
 ---
 
 <div class="text-4xl text-center mb-12 text-gray-900 font-bold">Available Templates</div>
 
 <div class="grid grid-cols-3 gap-6">
-<v-clicks>
 <!-- TITLE & ABOUT -->
-<div class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
+<div v-if="$clicks >= 1" class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
   <div class="flex items-center gap-2 mb-3">
     <div class="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center">
       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ layout: default
 </div>
 
 <!-- CONTENT -->
-<div class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
+<div v-if="$clicks >= 2" class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
   <div class="flex items-center gap-2 mb-3 justify-center">
     <div class="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center">
       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@ layout: default
 </div>
 
 <!-- DIAGRAMS -->
-<div class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
+<div v-if="$clicks >= 3" class="bg-gradient-to-b from-gray-50 to-gray-100 px-5 py-4 rounded-lg shadow-lg border-1 border-gray-400">
   <div class="flex items-center gap-2 mb-3">
     <div class="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center">
       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,5 +71,4 @@ layout: default
     </div>
   </div>
 </div>
-</v-clicks>
 </div>

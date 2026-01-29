@@ -28,6 +28,7 @@ Each section in the `{{sections}}` array should have:
 | `icon_path` | SVG path for the icon | "M9 12l2 2 4-4m5.618..." |
 | `subtitle` | Section subtitle | "Understanding Claude Code" |
 | `points` | Array of bullet points | ["What It Actually Is", "Where It Fits"] |
+| `click` | Click number for reveal (1-based) | 1, 2, 3 |
 | `center_title` | Optional: center the title | true/false |
 | `extra_margin` | Optional: add extra top margin | true/false |
 
@@ -68,7 +69,7 @@ npm run generate:slide -- --template=column-cards --name=01-agenda \
 - Grid layout that adapts to 2-4 columns
 - Cards with gradient backgrounds and shadows
 - Colored icons with customizable SVG paths
-- Progressive reveal animation (v-clicks)
+- Progressive reveal animation ($clicks-based v-if)
 - Consistent typography and spacing
 
 ## Icon Resources

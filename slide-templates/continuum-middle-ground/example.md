@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: 3
 ---
 
 <script setup>
@@ -21,10 +22,10 @@ import { X, Check } from 'lucide-vue-next'
     </div>
   </div>
 
-  <v-click at="1">
     <div
+      v-if="$clicks >= 1"
       class="absolute left-[0%] bottom-45 w-[250px] bg-white rounded-lg shadow-lg p-6 border border-gray-400"
-      :class="{ 'opacity-40': $slidev.nav.clicks >= 3 }"
+      :class="{ 'opacity-40': $clicks >= 3 }"
       style="transition: opacity 0.5s;"
     >
       <div class="flex flex-col items-center gap-3">
@@ -41,12 +42,11 @@ import { X, Check } from 'lucide-vue-next'
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 
-  <v-click at="2">
     <div
+      v-if="$clicks >= 2"
       class="absolute right-[0%] bottom-45 w-[250px] bg-white rounded-lg shadow-lg p-6 border border-gray-400"
-      :class="{ 'opacity-40': $slidev.nav.clicks >= 3 }"
+      :class="{ 'opacity-40': $clicks >= 3 }"
       style="transition: opacity 0.5s;"
     >
       <div class="flex flex-col items-center gap-3">
@@ -63,10 +63,8 @@ import { X, Check } from 'lucide-vue-next'
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 
-  <v-click at="3">
-    <div class="absolute left-1/2 bottom-45 w-[250px] transform -translate-x-1/2 bg-white rounded-lg shadow-xl p-6 border-3 z-10" style="border-color: #22c55e;">
+    <div v-if="$clicks >= 3" class="absolute left-1/2 bottom-45 w-[250px] transform -translate-x-1/2 bg-white rounded-lg shadow-xl p-6 border-3 z-10" style="border-color: #22c55e;">
       <div class="flex flex-col items-center gap-3">
         <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 mb-0" style="background-color: #22c55e; position: absolute; left: 50%; transform: translateX(-50%) translateY(-105%); z-index: 1;">
           <Check class="w-6 h-6 text-white" :stroke-width="3" />
@@ -81,11 +79,4 @@ import { X, Check } from 'lucide-vue-next'
         <div class="w-2 h-2 rounded-full bg-gray-700"></div>
       </div>
     </div>
-  </v-click>
 </div>
-
-<style>
-.slidev-vclick-hidden {
-  opacity: 0;
-}
-</style>
