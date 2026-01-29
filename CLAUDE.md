@@ -39,13 +39,14 @@ npm run template:help
 ## Architecture
 
 ### Slide System
-- Individual slides are stored as markdown files in `slides/` directory
-- Slides are numbered (e.g., `01-about-me.md`, `02-introduction.md`) for automatic ordering
-- `scripts/build.ts` generates `index.md` by concatenating all slides in numerical order
+- Each slide is a folder under `slides/` with `index.md` as the entry point
+- Slide folders are numbered (e.g., `01-about-me/index.md`, `02-introduction/index.md`) for automatic ordering
+- Folders can optionally contain an `assets/` subfolder for slide-specific images/media
+- `scripts/build.ts` generates `index.md` by discovering `*/index.md` files in numerical order
 - Each slide can have frontmatter for theme and layout configuration
 
 ### Key Directories
-- `slides/` - Individual slide markdown files with inline templates and styles
+- `slides/` - Individual slide folders, each with `index.md` entry point and optional `assets/`
 - `slide-templates/` - Reusable slide templates with documentation and examples
 - `ai_docs/` - AI-related documentation including speaker profile and brand guidelines
 - `public/` - Static assets accessible in slides
@@ -123,8 +124,8 @@ Template syntax supports:
 ## Development Workflow
 
 1. Choose a template: `npm run list:templates`
-2. Generate a slide: `npm run generate:slide -- --template=<name> --name=<slide-name> [variables]`
-3. Edit the generated slide in `slides/` if needed
+2. Generate a slide: `npm run generate:slide -- --template=<name> --name=<slide-name> [variables]` (creates `slides/<slide-name>/index.md`)
+3. Edit the generated slide in `slides/<slide-name>/index.md` if needed
 4. Run `npm run build:slides` to regenerate index.md
 5. Use `npm run dev` to preview changes
 6. Slides support standard markdown, Vue components, and inline styles

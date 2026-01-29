@@ -104,7 +104,7 @@ Capture screenshots for **all** templates in templates.json.
 
 - **Template identifiers**: Use `kebab-case` (e.g., `column-cards`, `three-to-one-takeaway`)
 - **Screenshot files**: `click-{n}.png` where n starts at 0
-- **Slide files**: Numbered prefix in `slides/` directory (e.g., `01-about-me.md`, `02-introduction.md`)
+- **Slide files**: Numbered prefix folders in `slides/` directory (e.g., `01-about-me/index.md`, `02-introduction/index.md`)
 
 ### Folder Structure
 
@@ -120,6 +120,30 @@ slide-templates/{template-name}/
     ├── click-1.png  # After first click
     └── click-N.png  # Up to clicks value
 ```
+
+### Slide Folder Structure
+
+Each slide lives in its own folder under `slides/`, with `index.md` as the entry point:
+
+```
+slides/
+├── 00-title/
+│   └── index.md           # Slide content (entry point)
+├── 01-column-cards/
+│   └── index.md
+├── 02-about-me/
+│   ├── index.md
+│   └── assets/            # Optional: slide-specific images, videos
+│       └── headshot.png
+└── 99-conclusion/
+    └── index.md
+```
+
+**Conventions**:
+- **Entry point**: Always `index.md` inside the folder
+- **Assets**: Use an `assets/` subfolder for slide-specific images/media, referenced with relative paths (`./assets/image.png`)
+- **Simple slides**: Just `index.md` — no boilerplate folders needed
+- **Permissive structure**: Folders can grow to include Vue components, code files, or other resources as needed
 
 ### URL Patterns
 
