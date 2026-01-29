@@ -9,13 +9,25 @@ This template creates a professional speaker introduction slide with a photo, na
 - For team member introductions
 - Any time you need a professional bio slide
 
+## Layout
+This template uses `layout: default` with fully inlined HTML and CSS — no external Vue layout dependency. All styling is self-contained within the slide's `<style>` block.
+
+## Assets Convention
+Place your speaker photo in the slide's `assets/` subfolder and reference it with a relative path:
+```
+slides/02-about-me/
+├── index.md
+└── assets/
+    └── avatar.jpeg
+```
+
 ## Template Variables
 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `{{name}}` | Speaker's full name | "Ford Lascari" |
 | `{{role}}` | Current role or title | "Applied AI Engineer & Consultant" |
-| `{{image_path}}` | Path to speaker's photo | "/avatar.jpeg" |
+| `{{image_path}}` | Relative path to speaker's photo | "./assets/avatar.jpeg" |
 | `{{sections}}` | Array of content sections | See section structure below |
 | `{{speaker_notes}}` | Speaker notes for the slide | "I've been in the trenches..." |
 
@@ -33,7 +45,7 @@ Each section in the `{{sections}}` array should have:
 npm run generate:slide -- --template=about-me --name=02-about-me \
   --name="Ford Lascari" \
   --role="Applied AI Engineer & Consultant" \
-  --image_path="/avatar.jpeg" \
+  --image_path="./assets/avatar.jpeg" \
   --sections='[
     {
       "title": "What I'\''ve Done",
@@ -69,6 +81,8 @@ The bullet points support HTML for emphasis:
 
 ## Notes
 - Photo should be square for best results
+- Place the photo in the slide's `assets/` subfolder for self-contained slides
 - The layout is optimized for 2-3 sections
 - Keep bullet points concise for readability
 - The photo container has fixed dimensions (280x280px)
+- No external layout dependency — all HTML/CSS is inlined in the slide

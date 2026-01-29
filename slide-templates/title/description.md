@@ -8,13 +8,16 @@ The title slide template creates an impactful opening slide with a large title, 
 - When you need a strong visual introduction
 - When you want to provide a QR code for audience participation
 
+## Layout
+This template uses `layout: default` with fully inlined HTML — no external Vue layout dependency. All structure is self-contained within the slide markdown.
+
 ## Template Variables
 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `{{title}}` | Main presentation title | "What is Claude Code?" |
 | `{{subtitle}}` | Secondary title or tagline | "...and Why You Should Care" |
-| `{{qr_link}}` | URL for the QR code | "https://example.com/presentation" |
+| `{{qr_link}}` | URL for the QR code (optional) | "https://example.com/presentation" |
 | `{{qr_label}}` | Text above the QR code | "Scan to Follow Along" |
 | `{{speaker_notes}}` | Speaker notes for the slide | "Welcome everyone, today we'll explore..." |
 
@@ -38,5 +41,6 @@ npm run generate:slide -- --template=title --name=00-title \
 
 ## Notes
 - The QR code is generated dynamically using the qr-server API
-- If you don't need a QR code, you can remove that section from the template
+- If `qr_link` is omitted, the QR section is not rendered
 - The slide uses custom fonts (Styrene A/B) defined in the theme
+- No external layout dependency — all HTML is inlined in the slide
