@@ -47,5 +47,13 @@ src: ./slides/11-terminal-demo/index.md
 ---
 
 ---
+src: ./slides/12-agent-walkthrough/index.md
+---
+
+---
+src: ./slides/13-how-skills-work/index.md
+---
+
+---
 src: ./slides/99-conclusion-lets-connect/index.md
 ---
