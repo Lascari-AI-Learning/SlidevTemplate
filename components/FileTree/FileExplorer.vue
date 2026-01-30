@@ -12,7 +12,7 @@ const props = defineProps<{
 // Load all files from slides/**/assets/filetree/** using a broad glob
 // We use 'as: 'raw' to get the content string
 // Path is relative to this component file location (components/FileTree/)
-const modules = import.meta.glob('../../slides/**/assets/filetree/**/*', { as: 'raw', eager: true })
+const modules = import.meta.glob('../../slides/**/assets/filetree/**/*', { query: '?raw', import: 'default', eager: true })
 
 interface FileNode {
   name: string
@@ -251,11 +251,11 @@ watch(() => selectedFile.value, async (newFile) => {
 <template>
   <div class="flex flex-col h-full">
     <div v-if="title" class="text-4xl text-center mb-6 text-gray-900 font-bold">{{ title }}</div>
-    <div class="flex flex-1 border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden shadow-lg text-sm font-mono bg-white dark:bg-[#1e1e1e] text-left">
+    <div class="flex flex-1 border border-[#3c3c3c] rounded-xl overflow-hidden shadow-lg text-xs font-mono bg-[#1e1e1e] text-left">
     <!-- Sidebar -->
-    <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#252526] overflow-y-auto">
-      <div class="p-2.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider pl-4 border-b border-gray-200 dark:border-gray-700">Explorer</div>
-      <div v-if="showWorkingDir" class="px-4 py-2 text-xs text-gray-400 dark:text-gray-500 border-b border-gray-200 dark:border-gray-700">
+    <div class="w-64 flex-shrink-0 border-r border-[#3c3c3c] bg-[#252526] overflow-y-auto">
+      <div class="p-2.5 text-xs font-bold text-gray-400 uppercase tracking-wider pl-4 border-b border-[#3c3c3c]">Explorer</div>
+      <div v-if="showWorkingDir" class="px-4 py-2 text-xs text-gray-500 border-b border-[#3c3c3c]">
         <div class="flex items-center gap-1">
           <span class="i-carbon:folder text-xs"></span>
           <span class="truncate">{{ dir }}</span>
@@ -276,15 +276,15 @@ watch(() => selectedFile.value, async (newFile) => {
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#1e1e1e]">
+    <div class="flex-1 flex flex-col min-w-0 bg-[#1e1e1e]">
       <div v-if="selectedFile" class="flex-1 flex flex-col min-h-0">
         <!-- Tab Header -->
-        <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#2d2d2d]">
-          <div class="px-4 py-2 bg-white dark:bg-[#1e1e1e] border-t-2 border-t-blue-500 text-gray-800 dark:text-gray-100 flex items-center gap-2 text-sm">
+        <div class="flex border-b border-[#3c3c3c] bg-[#2d2d2d]">
+          <div class="px-4 py-1.5 bg-[#1e1e1e] border-t-2 border-t-blue-500 text-gray-100 flex items-center gap-2 text-xs">
              <span :class="[getFileIcon(selectedFile.name), 'text-sm']"></span>
             {{ selectedFile.name }}
-            <span class="ml-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-0.5 cursor-pointer" @click="selectedFile = null">
-              <div class="i-carbon:close text-xs"></div>
+            <span class="ml-2 hover:bg-[#3c3c3c] rounded p-0.5 cursor-pointer" @click="selectedFile = null">
+              <div class="i-carbon:close text-xs text-gray-400"></div>
             </span>
           </div>
         </div>
@@ -306,7 +306,7 @@ watch(() => selectedFile.value, async (newFile) => {
           </Transition>
         </div>
       </div>
-      <div v-else class="flex-1 flex items-center justify-center text-gray-400 text-base">
+      <div v-else class="flex-1 flex items-center justify-center text-gray-500 text-base">
         Select a file to view
       </div>
     </div>
@@ -338,7 +338,7 @@ watch(() => selectedFile.value, async (newFile) => {
 
 .shiki-wrapper :deep(code) {
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   display: block;
   width: 100%;

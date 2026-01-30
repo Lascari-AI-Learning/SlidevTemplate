@@ -57,17 +57,17 @@ const getFileIcon = (name: string) => {
   <div>
     <div v-if="node.type === 'directory'">
       <div
-        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] text-gray-700 dark:text-gray-300 select-none transition-colors duration-150"
+        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-[#2a2d2e] text-gray-300 select-none transition-colors duration-150"
         :style="{ paddingLeft: `${depth * 14 + 8}px` }"
         @click="emit('toggle', node)"
       >
         <span
-          class="mr-1 transform transition-transform text-gray-500 flex items-center justify-center w-4 h-4"
+          class="mr-1 transform transition-transform text-gray-400 flex items-center justify-center w-4 h-4"
           :class="isExpanded ? 'rotate-90' : ''"
         >
           <div class="i-carbon:chevron-right text-xs"></div>
         </span>
-        <span class="i-vscode-icons:default-folder mr-2 text-base flex-shrink-0"></span>
+        <span class="i-vscode-icons:default-folder mr-2 text-sm flex-shrink-0"></span>
         <span class="truncate">{{ node.name }}/</span>
       </div>
 
@@ -89,12 +89,12 @@ const getFileIcon = (name: string) => {
 
     <div v-else>
       <div
-        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#2a2d2e] select-none transition-colors duration-150"
-        :class="{ 'bg-blue-50 dark:bg-[#37373d] text-blue-700 dark:text-white': isSelected, 'text-gray-700 dark:text-gray-300': !isSelected }"
+        class="flex items-center px-2 py-1.5 cursor-pointer hover:bg-[#2a2d2e] select-none transition-colors duration-150"
+        :class="{ 'bg-[#37373d] text-white': isSelected, 'text-gray-300': !isSelected }"
         :style="{ paddingLeft: `${depth * 14 + 28}px` }"
         @click="emit('select', node)"
       >
-         <span :class="[getFileIcon(node.name), 'mr-2 text-base flex-shrink-0']"></span>
+         <span :class="[getFileIcon(node.name), 'mr-2 text-sm flex-shrink-0']"></span>
         <span class="truncate">{{ node.name }}</span>
       </div>
     </div>
