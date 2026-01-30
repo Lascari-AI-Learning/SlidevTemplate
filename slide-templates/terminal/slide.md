@@ -13,6 +13,7 @@ layout: default
       {{#if shell}}shell="{{shell}}"{{/if}}
       {{#if prompt}}prompt="{{prompt}}"{{/if}}
       {{#if height}}:height="{{height}}"{{/if}}
+      {{#if animated}}:animated="true"{{/if}}
     />
   </div>
 </div>

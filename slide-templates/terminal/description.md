@@ -19,6 +19,7 @@ Display terminal/CLI commands with syntax-highlighted output in a macOS-style te
 | `{{shell}}` | Optional: shell type (default: bash) | "bash", "zsh", "powershell" |
 | `{{prompt}}` | Optional: prompt symbol (default: $) | "$", "❯", "PS>" |
 | `{{height}}` | Optional: terminal height in pixels | 300 |
+| `{{animated}}` | Optional: enable typing animation (default: false) | true |
 | `{{speaker_notes}}` | Speaker notes for the slide | "Walk through the setup..." |
 
 ### Lines Structure
@@ -43,6 +44,21 @@ npm run generate:slide -- --template=terminal --name=05-setup \
   ]'
 ```
 
+### Animated Usage Example
+
+```bash
+npm run generate:slide -- --template=terminal --name=06-live-demo \
+  --title="Live Demo" \
+  --terminal_title="Terminal" \
+  --animated="true" \
+  --lines='[
+    { "command": "claude", "output": "Welcome to Claude Code!" },
+    { "command": "help me build an API", "output": "I will help you create a REST API..." }
+  ]'
+```
+
+When `animated` is enabled, the first command begins typing automatically on slide load. Use the exposed `activateNextLine()` method via a template ref to trigger subsequent commands (e.g., with v-click or button interactions).
+
 ## Visual Features
 - macOS-style window chrome with traffic-light dots (red, yellow, green)
 - Centered terminal title in header bar
@@ -50,6 +66,7 @@ npm run generate:slide -- --template=terminal --name=05-setup \
 - Automatic JSON detection and highlighting for output
 - Copy-to-clipboard button on hover for each command
 - Dark terminal background optimized for code readability
+- **Animated mode**: character-by-character typing at ~50ms/char with blinking cursor, followed by a brief pause (~300ms) before output appears instantly
 
 ## Notes
 - The `lines` variable uses triple-brace `{{{lines}}}` in the template for raw HTML/JS output
