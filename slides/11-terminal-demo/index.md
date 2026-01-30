@@ -1,6 +1,7 @@
 ---
 theme: ../
 layout: default
+clicks: 3
 ---
 
 <div class="text-4xl text-center mb-8 text-gray-900 font-bold">Terminal Demo</div>
@@ -15,10 +16,12 @@ layout: default
       ]"
       title="my-project — bash"
       shell="bash"
+      :height="380"
+      :clicks="$clicks"
     />
   </div>
 </div>
 
 <!--
-Demo slide showing the Terminal component with macOS window chrome, syntax highlighting, and copy-to-clipboard.
+Demo slide showing the Terminal component with animated typing. Each click/arrow advances to the next command.
 -->
