@@ -35,5 +35,13 @@ src: ./slides/08-file-explorer/index.md
 ---
 
 ---
+src: ./slides/09-chart-demo/index.md
+---
+
+---
+src: ./slides/10-chart-single/index.md
+---
+
+---
 src: ./slides/99-conclusion-lets-connect/index.md
 ---

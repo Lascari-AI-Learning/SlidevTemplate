@@ -13,13 +13,16 @@
     "template:help": "echo 'Usage: npm run generate:slide -- --template=<template-name> --name=<slide-name> [--variable=value ...]'"
   },
   "dependencies": {
+    "@iconify-json/vscode-icons": "^1.2.40",
     "@slidev/cli": "^51.8.1",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "^0.25.0",
     "@slidev/types": "^51.8.2",
     "globby": "^14.1.0",
     "lucide-vue-next": "^0.532.0",
-    "vue": "^3.5.16"
+    "chart.js": "^4.5.1",
+    "vue": "^3.5.16",
+    "vue-chartjs": "^5.3.3"
   },
   "slidev": {
     "colorSchema": "light",
